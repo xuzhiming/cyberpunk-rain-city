@@ -1,0 +1,23 @@
+# Cloudflare Pages headers - https://developers.cloudflare.com/pages/configuration/headers/
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+
+# Vite output is content-hashed -> cache forever
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Large but un-hashed assets: cache for a week, revalidate in the background
+/city.glb
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+/audio/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+/colliders.json
+  Cache-Control: public, max-age=86400, stale-while-revalidate=86400
+
+# HTML always fresh so new deploys are picked up immediately
+/
+  Cache-Control: no-cache
+/index.html
+  Cache-Control: no-cache

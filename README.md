@@ -3,6 +3,8 @@
 在浏览器里漫游一座下着雨的赛博朋克城市：霓虹、全息广告、飞行汽车、第一/第三人称行走与飞行，以及原创的程序化合成配乐。
 A rainy cyberpunk city you can explore in the browser: neon signs, holographic billboards, flying cars, first/third-person walking & flight, and an original procedurally-synthesised soundtrack.
 
+**在线体验 Live demo: https://cyberpunk-rain-city-43h.pages.dev**
+
 ![Web version / 网页版](docs/web_screenshot.jpg)
 
 | 第一人称飞行 First-person flight | 音乐面板 Music panel | Blender 渲染 Blender render |
@@ -78,7 +80,7 @@ npm run test:music   # 音乐面板、M/N、持久化 music panel, M/N keys, per
 
 `.github/workflows/deploy.yml` 会在推送到 `main` 时构建并通过 `cloudflare/wrangler-action` 部署到 Pages 项目 `cyberpunk-rain-city`。
 需要在仓库 Secrets 中设置 `CLOUDFLARE_API_TOKEN` 与 `CLOUDFLARE_ACCOUNT_ID`。
-On every push to `main` the workflow builds and deploys to the Pages project `cyberpunk-rain-city`; set the repo secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`. Manual deploy: `npx wrangler pages deploy dist --project-name=cyberpunk-rain-city` (or `npm run deploy:pages`).
+On every push to `main` the workflow builds and deploys to the Pages project `cyberpunk-rain-city`; set the repo secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`. 缓存策略见 Caching rules: [`public/_headers`](public/_headers). Manual deploy: `npx wrangler pages deploy dist --project-name=cyberpunk-rain-city` (or `npm run deploy:pages`).
 
 ## 资源是如何制作的 How the assets were made
 

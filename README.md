@@ -79,6 +79,7 @@ npm run test:music   # 音乐面板、M/N、持久化 music panel, M/N keys, per
 ### 部署 Deploy (Cloudflare Pages)
 
 `.github/workflows/deploy.yml` 会在推送到 `main` 时构建并通过 `cloudflare/wrangler-action` 部署到 Pages 项目 `cyberpunk-rain-city`。
+推送到 `main` 即自动部署（已配置）。Auto-deploy on push to `main` is active.
 需要在仓库 Secrets 中设置 `CLOUDFLARE_API_TOKEN` 与 `CLOUDFLARE_ACCOUNT_ID`。
 On every push to `main` the workflow builds and deploys to the Pages project `cyberpunk-rain-city`; set the repo secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`. 缓存策略见 Caching rules: [`public/_headers`](public/_headers). Manual deploy: `npx wrangler pages deploy dist --project-name=cyberpunk-rain-city` (or `npm run deploy:pages`).
 

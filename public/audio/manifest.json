@@ -1,0 +1,36 @@
+{
+ "neon_highway": {
+  "file": "audio/neon_highway.mp3",
+  "loopStart": 1.0,
+  "loopEnd": 107.66666666666667,
+  "lufs": -16.0,
+  "bpm": 108
+ },
+ "rain_runner": {
+  "file": "audio/rain_runner.mp3",
+  "loopStart": 1.0,
+  "loopEnd": 91.0,
+  "lufs": -16.0,
+  "bpm": 64
+ },
+ "darknet_pulse": {
+  "file": "audio/darknet_pulse.mp3",
+  "loopStart": 1.0,
+  "loopEnd": 97.0,
+  "lufs": -16.0,
+  "bpm": 120
+ },
+ "lofi_rain": {
+  "file": "audio/lofi_rain.mp3",
+  "loopStart": 1.0,
+  "loopEnd": 99.46154195011339,
+  "lufs": -16.0,
+  "bpm": 78
+ },
+ "rain": {
+  "file": "audio/rain_ambience.mp3",
+  "loopStart": 1.0,
+  "loopEnd": 41.0,
+  "lufs": -24.0
+ }
+}

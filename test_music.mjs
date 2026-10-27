@@ -1,0 +1,43 @@
+import { chromium } from 'playwright-core';
+const url = process.argv[2] || 'http://127.0.0.1:8787/?q=low';
+const headers = {};
+const browser = await chromium.launch({ ...(process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : { channel: 'chrome' }), headless: true,
+  args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--no-sandbox'] });
+const ctx = await browser.newContext({ viewport: { width: 1024, height: 640 }, extraHTTPHeaders: headers });
+const page = await ctx.newPage();
+const errors = [];
+page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') errors.push(`${m.type()}: ${m.text()}`); });
+page.on('pageerror', (e) => errors.push('pageerror: ' + e.message));
+const R = {};
+const out = process.argv[4] || new URL('./shots', import.meta.url).pathname; (await import('fs')).mkdirSync(out, { recursive: true });
+const S = () => page.evaluate(() => window.__music.state);
+const until = async (fn, ms = 30000) => { const t = Date.now(); while (Date.now() - t < ms) { const s = await S(); if (fn(s)) return s; await page.waitForTimeout(250); } return S(); };
+await page.goto(url, { waitUntil: 'load', timeout: 120000 });
+await page.waitForFunction(() => window.__ready && window.__music, null, { timeout: 120000 });
+let s = await S(); console.log('initial', s); R.default_off_no_ctx = !s.on && s.ctx === 'none';
+await page.click('#musicbtn'); await page.waitForTimeout(300);
+R.panel_opens = await page.isVisible('#music');
+await page.selectOption('#m-track', 'neon_highway');
+s = await until((s) => s.playing); console.log('select neon', s); R.ctx_running_after_gesture = s.ctx === 'running' && s.current === 'neon_highway';
+await page.waitForTimeout(1500);
+await page.screenshot({ path: `${out}/6_music_panel.png` });
+await page.click('#m-next'); s = await until((s) => s.current === 'rain_runner'); console.log('next btn', s.current); R.next_button = s.current === 'rain_runner';
+await page.keyboard.press('KeyN'); s = await until((s) => s.current === 'darknet_pulse'); console.log('N key', s.current); R.n_key = s.current === 'darknet_pulse';
+await page.keyboard.press('KeyM'); s = await until((s) => !s.playing); console.log('M off', s); R.m_pauses = !s.playing && !s.on;
+await page.keyboard.press('KeyM'); s = await until((s) => s.playing); R.m_resumes = s.playing && s.current === 'darknet_pulse';
+await page.check('#m-rain'); s = await until((s) => s.rainPlaying); R.rain = s.rainPlaying;
+await page.locator('#m-vol').fill('35'); s = await S(); R.volume = s.volume === 35;
+// level reaches the analyser (audio graph actually running)
+R.analyser_signal = await page.evaluate(async () => { const c = window.__audioCtx; await new Promise((r) => setTimeout(r, 800)); return c.state === 'running' && c.currentTime > 1; });
+await page.selectOption('#m-track', 'lofi_rain'); s = await until((s) => s.current === 'lofi_rain'); R.select_lofi = s.current === 'lofi_rain';
+await page.screenshot({ path: `${out}/7_music_panel_lofi.png` });
+// persistence across reload: must wait for a gesture
+await page.reload({ waitUntil: 'load' }); await page.waitForFunction(() => window.__ready && window.__music);
+s = await S(); console.log('after reload', s, await page.textContent('#musicbtn'));
+R.persist = s.on && s.track === 'lofi_rain' && s.rain && s.volume === 35 && !s.playing && s.ctx === 'none';
+await page.mouse.click(600, 400); s = await until((s) => s.playing && s.rainPlaying); console.log('after tap', s); R.resume_on_gesture = s.playing && s.current === 'lofi_rain';
+await page.selectOption('#m-track', 'off').catch(async () => { await page.click('#musicbtn'); await page.selectOption('#m-track', 'off'); });
+s = await until((s) => !s.playing); R.off_option = !s.playing && !s.on;
+await page.evaluate(() => localStorage.removeItem('cyberpunk.audio.v1'));
+console.log('RESULTS', JSON.stringify(R, null, 1)); console.log('ERRORS', JSON.stringify(errors, null, 1));
+await browser.close();

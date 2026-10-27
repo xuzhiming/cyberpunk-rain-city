@@ -1,0 +1,36 @@
+{
+  "name": "cyberpunk-rain-city",
+  "version": "1.0.0",
+  "description": "Cyberpunk rainy city in the browser: Three.js scene with first/third-person flight controls and original procedural synthwave music.",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "author": "xuzhiming",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xuzhiming/cyberpunk-rain-city.git"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "test:game": "node test_game.mjs http://127.0.0.1:4173/?q=low",
+    "test:music": "node test_music.mjs http://127.0.0.1:4173/?q=low",
+    "music": "python3 music/tracks.py",
+    "optimize:glb": "gltf-transform optimize city_raw.glb public/city.glb --compress meshopt --palette false --join false --flatten false --simplify false --texture-compress false --instance true --prune-attributes false",
+    "deploy:pages": "wrangler pages deploy dist --project-name=cyberpunk-rain-city"
+  },
+  "dependencies": {
+    "three": "^0.186.1"
+  },
+  "devDependencies": {
+    "@gltf-transform/cli": "^4.5.1",
+    "playwright-core": "^1.64.1",
+    "vite": "^8.3.5",
+    "wrangler": "^4.153.0"
+  },
+  "keywords": []
+}

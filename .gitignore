@@ -1,0 +1,43 @@
+# dependencies / build output
+node_modules/
+dist/
+.vite/
+.wrangler/
+
+# logs & local runtime files
+logs/
+*.log
+server.log
+tunnel.log
+tunnel/
+.pinggy*
+serve.pid
+
+# secrets
+.env
+.env.*
+!.env.example
+.dev.vars
+
+# large / generated artefacts (regenerate with the scripts)
+*.tar.gz
+*.zip
+city_raw.glb
+*.blend
+*.blend1
+renders/
+anim/
+*.mp4
+
+# test screenshots (curated images live in docs/)
+shots/
+screenshot*.png
+
+# python / editor / OS
+__pycache__/
+*.pyc
+.venv/
+venv/
+.DS_Store
+.idea/
+.vscode/
